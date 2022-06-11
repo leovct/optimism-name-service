@@ -40,9 +40,10 @@ slither .
 # 🛡️ Run mythril (audit).
 myth analyze contracts/ONS.sol
 
-# 🏠 Deploy contract to localhost blockchain.
+# 🏠 Deploy contract to localhost blockchain (hardhat and foundry).
 npx hardhat run scripts/deploy.ts
+forge script scripts
 
-# 🚀 Deploy and verify contract to Optimistic Kovan testnet.
+# 🚀 Deploy and verify contract to Optimistic Kovan testnet (hardhat).
 npx hardhat run scripts/deploy.ts --network optimisticKovan
 ```

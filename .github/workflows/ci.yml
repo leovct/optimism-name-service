@@ -1,6 +1,6 @@
 # This worflow is composed of two jobs: hardhat and audit:
 # - The linter job checks the files linting (typescript, solidity, etc.).
-# - The hardhat job compiles and tests the smart contracts.
+# - The test job compiles and tests the smart contracts.
 # - The audit job installs python, slither-analizer and mythril before performing static analysis on solidity files.
 name: CI Workflow
 
@@ -44,7 +44,7 @@ jobs:
     - name: 🪄 Lint files with solhint
       run: npx solhint 'contracts/**/*.sol'
 
-  hardhat:
+  test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -85,10 +85,10 @@ jobs:
         sudo wget -O /usr/bin/solc https://github.com/ethereum/solidity/releases/download/v0.8.7/solc-static-linux
         sudo chmod +x /usr/bin/solc
     - name: ⚙️ Compile
-      run: npm run compile
+      run: npx hardhat compile
     - name: 🐍 Run slither
-      run: npm run slither
+      run: slither .
       continue-on-error: true
     - name: 🛡️ Run mythril
-      run: npm run mythril
+      run: myth analyze contracts/ONS.sol
       continue-on-error: true

@@ -14,17 +14,16 @@ async function main() {
     `ONS contract deployed to the ${network.name} blockchain: ${ons.address}`
   );
 
-  // Verify the contract on https://optimistic.etherscan.io/.
+  // Verify the contract on https://kovan-optimistic.etherscan.io/.
   if (network.config.chainId !== 31337) {
     console.log(
-      `Waiting for 5 block confirmations before verifying the contract on https://optimistic.etherscan.io/address/${ons.address} ...`
+      `Waiting for 5 block confirmations before verifying the contract on https://kovan-optimistic.etherscan.io/address/${ons.address} ...`
     );
     await ons.deployTransaction.wait(6);
 
     await hre.run("verify:verify", {
       address: ons.address,
     });
-    https://optimistic.etherscan.io/address/0x7cB8b8aF47e85e4f63518f328b02219a7E4fC9D9
   }
 }
 

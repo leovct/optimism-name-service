@@ -12,6 +12,7 @@ The project is at the prototype stage and is currently being deployed and tested
 ```shell
 # 📦 Get up and running (make sure to update the environment variables).
 npm install
+curl -L https://foundry.paradigm.xyz | bash # foundry (https://github.com/foundry-rs/foundry).
 cp .env.example .env
 
 # 🪄 Lint files.
@@ -22,11 +23,13 @@ npx prettier '**/*.{json,sol,md}' --write
 npx solhint 'contracts/**/*.sol'
 npx solhint 'contracts/**/*.sol' --fix
 
-# ⚙️ Compile contracts.
+# ⚙️ Compile contracts (hardhat and foundry).
 npx hardhat compile
+forge build
 
-# 🧪 Test contracts (with gas report).
+# 🧪 Test contracts with gas report (hardhat and foundry).
 npx hardhat test
+forge test -vvv
 
 # 📊 Test coverage report.
 npx hardhat coverage

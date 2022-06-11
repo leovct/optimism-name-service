@@ -53,13 +53,21 @@ jobs:
       with:
         node-version: 16.14.2
         cache: 'npm'
-    - name: 🔧 Install dependencies
+    - name: 🔧 Install npm dependencies
       run: npm install
-    - name: ⚙️ Compile
+    - name: 🔧 Install foundry
+      uses: onbjerg/foundry-toolchain@v1
+      with:
+        version: nightly
+    - name: ⚙️ Compile (hardhat)
       run: npx hardhat compile
-    - name: 🧪 Test
-      run: npx hardhat test 
-    - name: 📊 Coverage
+    - name: ⚙️ Compile (foundry)
+      run: forge build
+    - name: 🧪 Test (hardhat)
+      run: npx hardhat test
+    - name: 🧪 Test (foundry)
+      run: forge test -vvv
+    - name: 📊 Coverage (hardhat)
       run: npx hardhat coverage
     env:
       REPORT_GAS: true

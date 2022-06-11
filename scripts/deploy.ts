@@ -17,7 +17,7 @@ async function main() {
   // Verify the contract on https://kovan-optimistic.etherscan.io/.
   if (network.config.chainId !== 31337) {
     console.log(
-      `Waiting for 5 block confirmations before verifying the contract (see https://kovan-optimistic.etherscan.io/address/${ons.address})...`
+      "Waiting for 5 block confirmations before verifying the contract"
     );
     await ons.deployTransaction.wait(6);
 

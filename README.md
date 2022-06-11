@@ -31,6 +31,9 @@ npx hardhat test
 # 📊 Test coverage report.
 npx hardhat coverage
 
+# 🤖 Generate contract's documentation.
+npx hardhat docgen
+
 # 🐍 Run slither (audit).
 slither .
 

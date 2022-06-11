@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.14;
+pragma solidity ^0.8.7;
 
 /**
  * @title Optimsim Name Service Interface v0.0.0

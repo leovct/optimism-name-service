@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.14;
+pragma solidity ^0.8.7;
 
 import "./IONS.sol";
 
@@ -33,6 +33,7 @@ contract ONS is IONS {
                                             Core
     ***********************************************************************************************/
 
+    //slither-disable-next-line naming-convention
     function register(bytes32 _domain, uint256 _ttl) external override {
         verifyBytes32IsNotEmpty(_domain);
         verifyUintIsNotEqualToZero(_ttl);
@@ -47,13 +48,15 @@ contract ONS is IONS {
         );
     }
 
-    /**
-     * @dev The controller and optimism addresses can be set to the black hole addres.
-     */
+    // @dev The controller and optimism addresses can be set to the black hole addres.
     function registerWithParameters(
+        //slither-disable-next-line naming-convention
         bytes32 _domain,
+        //slither-disable-next-line naming-convention
         address _controllerAddress,
+        //slither-disable-next-line naming-convention
         address _optimismAddress,
+        //slither-disable-next-line naming-convention
         uint256 _ttl
     ) external override {
         verifyBytes32IsNotEmpty(_domain);
@@ -69,6 +72,7 @@ contract ONS is IONS {
         );
     }
 
+    //slither-disable-next-line naming-convention
     function deregister(bytes32 _domain) external override {
         verifyBytes32IsNotEmpty(_domain);
         verifyDomainExists(_domain);
@@ -81,6 +85,7 @@ contract ONS is IONS {
                                             Getters
     ***********************************************************************************************/
 
+    //slither-disable-next-line naming-convention
     function getOwner(bytes32 _domain)
         external
         view
@@ -93,6 +98,7 @@ contract ONS is IONS {
         return domainToRecord[_domain].ownerAddress;
     }
 
+    //slither-disable-next-line naming-convention
     function getController(bytes32 _domain)
         external
         view
@@ -105,6 +111,7 @@ contract ONS is IONS {
         return domainToRecord[_domain].controllerAddress;
     }
 
+    //slither-disable-next-line naming-convention
     function getAddress(bytes32 _domain)
         external
         view
@@ -117,6 +124,7 @@ contract ONS is IONS {
         return domainToRecord[_domain].optimismAddress;
     }
 
+    //slither-disable-next-line naming-convention
     function getTTL(bytes32 _domain) external view override returns (uint256) {
         verifyBytes32IsNotEmpty(_domain);
         verifyDomainExists(_domain);
@@ -128,6 +136,7 @@ contract ONS is IONS {
                                             Setters
     ***********************************************************************************************/
 
+    //slither-disable-next-line naming-convention
     function setOwner(bytes32 _domain, address _ownerAddress)
         external
         override
@@ -141,9 +150,8 @@ contract ONS is IONS {
         emit NewOwner(_domain, _ownerAddress);
     }
 
-    /**
-     * @dev The controller address can be set to the black hole addres.
-     */
+    // @dev The controller address can be set to the black hole addres.
+    //slither-disable-next-line naming-convention
     function setController(bytes32 _domain, address _controllerAddress)
         external
         override
@@ -156,9 +164,8 @@ contract ONS is IONS {
         emit NewController(_domain, _controllerAddress);
     }
 
-    /**
-     * @dev The optimism address can be set to the black hole addres.
-     */
+    // @dev The optimism address can be set to the black hole addres.
+    //slither-disable-next-line naming-convention
     function setAddress(bytes32 _domain, address _optimismAddress)
         external
         override
@@ -171,6 +178,7 @@ contract ONS is IONS {
         emit NewAddress(_domain, _optimismAddress);
     }
 
+    //slither-disable-next-line naming-convention
     function setTTL(bytes32 _domain, uint256 _ttl) external override {
         verifyBytes32IsNotEmpty(_domain);
         verifyUintIsNotEqualToZero(_ttl);
@@ -196,6 +204,7 @@ contract ONS is IONS {
      * @dev Verify that a domain exists.
      * @param _domain the domain.
      */
+    //slither-disable-next-line naming-convention
     function verifyDomainExists(bytes32 _domain) internal view {
         if (!domainToExist[_domain]) {
             revert DomainDoesNotExist({domain: _domain});
@@ -206,6 +215,7 @@ contract ONS is IONS {
      * @dev Verify that a domain does not exist.
      * @param _domain the domain.
      */
+    //slither-disable-next-line naming-convention
     function verifyDomainDoesNotExist(bytes32 _domain) internal view {
         if (domainToExist[_domain]) {
             revert DomainAlreadyExists({domain: _domain});
@@ -216,6 +226,7 @@ contract ONS is IONS {
      * @dev Verify that a bytes32 parameter is not empty.
      * @param _str the bytes32 parameter.
      */
+    //slither-disable-next-line naming-convention
     function verifyBytes32IsNotEmpty(bytes32 _str) internal pure {
         if (_str == bytes32(0)) {
             revert EmptyByteString();
@@ -226,6 +237,7 @@ contract ONS is IONS {
      * @dev Verify that an unsigned integer parameter is not equal to zero.
      * @param _n the unsigned parameter.
      */
+    //slither-disable-next-line naming-convention
     function verifyUintIsNotEqualToZero(uint256 _n) internal pure {
         if (_n == 0) {
             revert EqualToZero();
@@ -236,6 +248,7 @@ contract ONS is IONS {
      * @dev Verify that an address parameter is not  null.
      * @param _address the address parameter.
      */
+    //slither-disable-next-line naming-convention
     function verifyAddressIsNotNull(address _address) internal pure {
         if (_address == address(0)) {
             revert NullAddress();
@@ -246,6 +259,7 @@ contract ONS is IONS {
      * @dev Verify that only the owner of the domain can call this method.
      * @param _domain the domain.
      */
+    //slither-disable-next-line naming-convention
     function onlyOwner(bytes32 _domain) internal view {
         if (msg.sender != domainToRecord[_domain].ownerAddress) {
             revert Unauthorised({
@@ -259,6 +273,7 @@ contract ONS is IONS {
      * @dev Verify that only the owner or the controller of the domain can call this method.
      * @param _domain the domain.
      */
+    //slither-disable-next-line naming-convention
     function onlyOwnerOrController(bytes32 _domain) internal view {
         if (
             msg.sender != domainToRecord[_domain].ownerAddress &&

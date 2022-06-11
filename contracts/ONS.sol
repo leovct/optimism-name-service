@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.12;
 
 import "./IONS.sol";
 
@@ -8,6 +8,7 @@ import "./IONS.sol";
  * @author leovct
  * @notice Implementation of the distributed naming system based on the Optimism blockchain, highly
  * inspired by the Ethereum Name Service (ENS).
+ * @dev Custom errors are used instead of require statements because it costs less gas.
  */
 contract ONS is IONS {
     struct Record {
@@ -23,90 +24,20 @@ contract ONS is IONS {
     }
 
     // This mapping allows to obtain the records of a domain.
-    mapping(bytes32 => Record) domainToRecord;
+    mapping(bytes32 => Record) private domainToRecord;
 
     // This mapping allows to know if a domain exists or not.
-    mapping(bytes32 => bool) domainToExist;
-
-    /***********************************************************************************************
-                                            Modifiers
-    ***********************************************************************************************/
-
-    /**
-     * @dev Call the function only if the domain exists.
-     * @param _domain the hash of the domain.
-     */
-    modifier exist(bytes32 _domain) {
-        require(domainToExist[_domain], "The domain does not exist");
-        _;
-    }
-
-    /**
-     * @dev Call the function only if the domain does not exist.
-     * @param _domain the hash of the domain.
-     */
-    modifier doesNotExist(bytes32 _domain) {
-        require(!domainToExist[_domain], "The domain already exists");
-        _;
-    }
-
-    /**
-     * @dev Call the function only if the provided bytes string is not empty.
-     * @param _bytes the bytes string.
-     */
-    modifier notEmpty(bytes32 _bytes) {
-        require(_bytes != bytes32(0), "The bytes parameter cannot be empty");
-        _;
-    }
-
-    /**
-     * @dev Call the function only if the provided unsigned integer is strictly superior to zero.
-     * @param _n the unsigned integer.
-     */
-    modifier superiorToZero(uint256 _n) {
-        require(
-            _n > 0,
-            "The unsigned integer parameter cannot be equal to zero"
-        );
-        _;
-    }
-
-    /**
-     * @dev Only authorize the owner of the domain to call the function.
-     * @param _domain the hash of the domain.
-     */
-    modifier onlyOwner(bytes32 _domain) {
-        require(
-            msg.sender == domainToRecord[_domain].ownerAddress,
-            "Only the owner can call this method"
-        );
-        _;
-    }
-
-    /**
-     * @dev Only authorize the owner and the controller of the domain to call the function.
-     * @param _domain the hash of the domain.
-     */
-    modifier onlyOwnerOrController(bytes32 _domain) {
-        require(
-            msg.sender == domainToRecord[_domain].ownerAddress ||
-                msg.sender == domainToRecord[_domain].controllerAddress,
-            "Only the owner and the controller can call this method"
-        );
-        _;
-    }
+    mapping(bytes32 => bool) private domainToExist;
 
     /***********************************************************************************************
                                             Core
     ***********************************************************************************************/
 
-    function register(bytes32 _domain, uint256 _ttl)
-        external
-        override
-        notEmpty(_domain)
-        superiorToZero(_ttl)
-        doesNotExist(_domain)
-    {
+    function register(bytes32 _domain, uint256 _ttl) external override {
+        verifyBytes32IsNotEmpty(_domain);
+        verifyUintIsNotEqualToZero(_ttl);
+        verifyDomainDoesNotExist(_domain);
+
         domainToExist[_domain] = true;
         domainToRecord[_domain] = Record(
             msg.sender,
@@ -124,13 +55,11 @@ contract ONS is IONS {
         address _controllerAddress,
         address _optimismAddress,
         uint256 _ttl
-    )
-        external
-        override
-        notEmpty(_domain)
-        superiorToZero(_ttl)
-        doesNotExist(_domain)
-    {
+    ) external override {
+        verifyBytes32IsNotEmpty(_domain);
+        verifyUintIsNotEqualToZero(_ttl);
+        verifyDomainDoesNotExist(_domain);
+
         domainToExist[_domain] = true;
         domainToRecord[_domain] = Record(
             msg.sender,
@@ -140,13 +69,11 @@ contract ONS is IONS {
         );
     }
 
-    function deregister(bytes32 _domain)
-        external
-        override
-        notEmpty(_domain)
-        exist(_domain)
-        onlyOwner(_domain)
-    {
+    function deregister(bytes32 _domain) external override {
+        verifyBytes32IsNotEmpty(_domain);
+        verifyDomainExists(_domain);
+        onlyOwner(_domain);
+
         domainToExist[_domain] = false;
     }
 
@@ -158,10 +85,11 @@ contract ONS is IONS {
         external
         view
         override
-        notEmpty(_domain)
-        exist(_domain)
         returns (address)
     {
+        verifyBytes32IsNotEmpty(_domain);
+        verifyDomainExists(_domain);
+
         return domainToRecord[_domain].ownerAddress;
     }
 
@@ -169,10 +97,11 @@ contract ONS is IONS {
         external
         view
         override
-        notEmpty(_domain)
-        exist(_domain)
         returns (address)
     {
+        verifyBytes32IsNotEmpty(_domain);
+        verifyDomainExists(_domain);
+
         return domainToRecord[_domain].controllerAddress;
     }
 
@@ -180,21 +109,18 @@ contract ONS is IONS {
         external
         view
         override
-        notEmpty(_domain)
-        exist(_domain)
         returns (address)
     {
+        verifyBytes32IsNotEmpty(_domain);
+        verifyDomainExists(_domain);
+
         return domainToRecord[_domain].optimismAddress;
     }
 
-    function getTTL(bytes32 _domain)
-        external
-        view
-        override
-        notEmpty(_domain)
-        exist(_domain)
-        returns (uint256)
-    {
+    function getTTL(bytes32 _domain) external view override returns (uint256) {
+        verifyBytes32IsNotEmpty(_domain);
+        verifyDomainExists(_domain);
+
         return domainToRecord[_domain].ttl;
     }
 
@@ -205,14 +131,12 @@ contract ONS is IONS {
     function setOwner(bytes32 _domain, address _ownerAddress)
         external
         override
-        notEmpty(_domain)
-        exist(_domain)
-        onlyOwner(_domain)
     {
-        require(
-            _ownerAddress != address(0),
-            "The owner address cannot be null"
-        );
+        verifyBytes32IsNotEmpty(_domain);
+        verifyDomainExists(_domain);
+        verifyAddressIsNotNull(_ownerAddress);
+        onlyOwner(_domain);
+
         domainToRecord[_domain].ownerAddress = _ownerAddress;
         emit NewOwner(_domain, _ownerAddress);
     }
@@ -223,10 +147,11 @@ contract ONS is IONS {
     function setController(bytes32 _domain, address _controllerAddress)
         external
         override
-        notEmpty(_domain)
-        exist(_domain)
-        onlyOwner(_domain)
     {
+        verifyBytes32IsNotEmpty(_domain);
+        verifyDomainExists(_domain);
+        onlyOwner(_domain);
+
         domainToRecord[_domain].controllerAddress = _controllerAddress;
         emit NewController(_domain, _controllerAddress);
     }
@@ -237,23 +162,112 @@ contract ONS is IONS {
     function setAddress(bytes32 _domain, address _optimismAddress)
         external
         override
-        notEmpty(_domain)
-        exist(_domain)
-        onlyOwnerOrController(_domain)
     {
+        verifyBytes32IsNotEmpty(_domain);
+        verifyDomainExists(_domain);
+        onlyOwnerOrController(_domain);
+
         domainToRecord[_domain].optimismAddress = _optimismAddress;
         emit NewAddress(_domain, _optimismAddress);
     }
 
-    function setTTL(bytes32 _domain, uint256 _ttl)
-        external
-        override
-        notEmpty(_domain)
-        superiorToZero(_ttl)
-        exist(_domain)
-        onlyOwnerOrController(_domain)
-    {
+    function setTTL(bytes32 _domain, uint256 _ttl) external override {
+        verifyBytes32IsNotEmpty(_domain);
+        verifyUintIsNotEqualToZero(_ttl);
+        verifyDomainExists(_domain);
+        onlyOwnerOrController(_domain);
+
         domainToRecord[_domain].ttl = _ttl;
         emit NewTTL(_domain, _ttl);
+    }
+
+    /***********************************************************************************************
+                                            Custom errors
+    ***********************************************************************************************/
+
+    error DomainDoesNotExist(bytes32 domain);
+    error DomainAlreadyExists(bytes32 domain);
+    error EmptyByteString();
+    error EqualToZero();
+    error NullAddress();
+    error Unauthorised(address callerAddress, string expectedCallers);
+
+    /**
+     * @dev Verify that a domain exists.
+     * @param _domain the domain.
+     */
+    function verifyDomainExists(bytes32 _domain) internal view {
+        if (!domainToExist[_domain]) {
+            revert DomainDoesNotExist({domain: _domain});
+        }
+    }
+
+    /**
+     * @dev Verify that a domain does not exist.
+     * @param _domain the domain.
+     */
+    function verifyDomainDoesNotExist(bytes32 _domain) internal view {
+        if (domainToExist[_domain]) {
+            revert DomainAlreadyExists({domain: _domain});
+        }
+    }
+
+    /**
+     * @dev Verify that a bytes32 parameter is not empty.
+     * @param _str the bytes32 parameter.
+     */
+    function verifyBytes32IsNotEmpty(bytes32 _str) internal pure {
+        if (_str == bytes32(0)) {
+            revert EmptyByteString();
+        }
+    }
+
+    /**
+     * @dev Verify that an unsigned integer parameter is not equal to zero.
+     * @param _n the unsigned parameter.
+     */
+    function verifyUintIsNotEqualToZero(uint256 _n) internal pure {
+        if (_n == 0) {
+            revert EqualToZero();
+        }
+    }
+
+    /**
+     * @dev Verify that an address parameter is not  null.
+     * @param _address the address parameter.
+     */
+    function verifyAddressIsNotNull(address _address) internal pure {
+        if (_address == address(0)) {
+            revert NullAddress();
+        }
+    }
+
+    /**
+     * @dev Verify that only the owner of the domain can call this method.
+     * @param _domain the domain.
+     */
+    function onlyOwner(bytes32 _domain) internal view {
+        if (msg.sender != domainToRecord[_domain].ownerAddress) {
+            revert Unauthorised({
+                callerAddress: msg.sender,
+                expectedCallers: "owner"
+            });
+        }
+    }
+
+    /**
+     * @dev Verify that only the owner or the controller of the domain can call this method.
+     * @param _domain the domain.
+     */
+    function onlyOwnerOrController(bytes32 _domain) internal view {
+        if (
+            msg.sender != domainToRecord[_domain].ownerAddress &&
+            msg.sender != domainToRecord[_domain].controllerAddress
+        ) {
+            revert Unauthorised({
+                callerAddress: msg.sender,
+                expectedCallers: "owner or controller"
+            });
+        }
     }
 }

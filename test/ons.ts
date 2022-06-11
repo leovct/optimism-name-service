@@ -78,7 +78,7 @@ describe("ONS", function () {
       // Register a domain with an empty string with both functions (standard and with parameters).
       await expect(
         ons.register(ethers.utils.formatBytes32String(""), ttl)
-      ).to.be.revertedWith("The bytes parameter cannot be empty");
+      ).to.be.revertedWith("EmptyByteString");
 
       await expect(
         ons.registerWithParameters(
@@ -87,14 +87,12 @@ describe("ONS", function () {
           random02.address,
           ttl
         )
-      ).to.be.revertedWith("The bytes parameter cannot be empty");
+      ).to.be.revertedWith("EmptyByteString");
     });
 
     it("Should fail when trying to register a domain with an empty ttl", async function () {
       // Register a domain with an empty ttl with both functions (standard and with parameters).
-      await expect(ons.register(domain, 0)).to.be.revertedWith(
-        "The unsigned integer parameter cannot be equal to zero"
-      );
+      await expect(ons.register(domain, 0)).to.be.revertedWith("EqualToZero");
 
       await expect(
         ons.registerWithParameters(
@@ -103,9 +101,7 @@ describe("ONS", function () {
           random02.address,
           0
         )
-      ).to.be.revertedWith(
-        "The unsigned integer parameter cannot be equal to zero"
-      );
+      ).to.be.revertedWith("EqualToZero");
     });
 
     it("Should fail when trying to register an already registered domain", async function () {
@@ -114,7 +110,7 @@ describe("ONS", function () {
       await registerTx.wait();
 
       await expect(ons.register(domain, ttl)).to.be.revertedWith(
-        "The domain already exist"
+        `DomainAlreadyExists("${domain}")`
       );
 
       await expect(
@@ -124,7 +120,7 @@ describe("ONS", function () {
           random02.address,
           ttl
         )
-      ).to.be.revertedWith("The domain already exist");
+      ).to.be.revertedWith(`DomainAlreadyExists("${domain}")`);
     });
   });
 
@@ -140,32 +136,30 @@ describe("ONS", function () {
 
       // Check that trying to get the domain records reverts.
       await expect(ons.getOwner(domain)).to.be.revertedWith(
-        "The domain does not exist"
+        "DomainDoesNotExist"
       );
 
       await expect(ons.getController(domain)).to.be.revertedWith(
-        "The domain does not exist"
+        "DomainDoesNotExist"
       );
 
       await expect(ons.getAddress(domain)).to.be.revertedWith(
-        "The domain does not exist"
+        "DomainDoesNotExist"
       );
 
-      await expect(ons.getTTL(domain)).to.be.revertedWith(
-        "The domain does not exist"
-      );
+      await expect(ons.getTTL(domain)).to.be.revertedWith("DomainDoesNotExist");
     });
 
     it("Should fail when trying to deregister a domain with an empty string", async function () {
       await expect(
         ons.deregister(ethers.utils.formatBytes32String(""))
-      ).to.be.revertedWith("The bytes parameter cannot be empty");
+      ).to.be.revertedWith("EmptyByteString");
     });
 
     it("Should fail when trying to deregister a domain that is not registered", async function () {
       await expect(
         ons.deregister(ethers.utils.formatBytes32String("arandomdomain.opt"))
-      ).to.be.revertedWith("The domain does not exist");
+      ).to.be.revertedWith("DomainDoesNotExist");
     });
 
     it("Should fail when trying to deregister a domain with a different account than the current owner", async function () {
@@ -174,7 +168,7 @@ describe("ONS", function () {
       await registerTx.wait();
 
       await expect(ons.connect(user).deregister(domain)).to.be.revertedWith(
-        "Only the owner can call this method"
+        `Unauthorised("${user.address}", "owner")`
       );
     });
   });
@@ -202,7 +196,7 @@ describe("ONS", function () {
 
     it("Should fail when trying to set the domain's owner with an empty string", async function () {
       await expect(ons.setOwner(domain, random01.address)).to.be.revertedWith(
-        "The domain does not exist"
+        "DomainDoesNotExist"
       );
     });
 
@@ -212,7 +206,7 @@ describe("ONS", function () {
           ethers.utils.formatBytes32String("arandomdomain.opt"),
           random01.address
         )
-      ).to.be.revertedWith("The domain does not exist");
+      ).to.be.revertedWith("DomainDoesNotExist");
     });
 
     it("Should fail when trying to set the domain's owner with a different account than the current owner", async function () {
@@ -222,7 +216,7 @@ describe("ONS", function () {
 
       await expect(
         ons.connect(user).setOwner(domain, random01.address)
-      ).to.be.revertedWith("Only the owner can call this method");
+      ).to.be.revertedWith(`Unauthorised("${user.address}", "owner")`);
     });
 
     it("Should fail when trying to set the domain's owner with an empty address", async function () {
@@ -232,7 +226,7 @@ describe("ONS", function () {
 
       await expect(
         ons.setOwner(domain, ethers.constants.AddressZero)
-      ).to.be.revertedWith("The owner address cannot be null");
+      ).to.be.revertedWith("NullAddress");
     });
   });
 
@@ -256,7 +250,7 @@ describe("ONS", function () {
     it("Should fail when trying to set the domain's controller with an empty string", async function () {
       await expect(
         ons.setController(domain, random01.address)
-      ).to.be.revertedWith("The domain does not exist");
+      ).to.be.revertedWith("DomainDoesNotExist");
     });
 
     it("Should fail when trying to set the domain's controller that is not registered", async function () {
@@ -265,7 +259,7 @@ describe("ONS", function () {
           ethers.utils.formatBytes32String("arandomdomain.opt"),
           random01.address
         )
-      ).to.be.revertedWith("The domain does not exist");
+      ).to.be.revertedWith("DomainDoesNotExist");
     });
 
     it("Should fail when trying to set the domain's controller with a different account than the current owner", async function () {
@@ -275,7 +269,7 @@ describe("ONS", function () {
 
       await expect(
         ons.connect(user).setController(domain, random01.address)
-      ).to.be.revertedWith("Only the owner can call this method");
+      ).to.be.revertedWith(`Unauthorised("${user.address}", "owner")`);
     });
   });
 
@@ -323,7 +317,7 @@ describe("ONS", function () {
 
     it("Should fail when trying to set the domain's address with an empty string", async function () {
       await expect(ons.setAddress(domain, random01.address)).to.be.revertedWith(
-        "The domain does not exist"
+        "DomainDoesNotExist"
       );
     });
 
@@ -333,7 +327,7 @@ describe("ONS", function () {
           ethers.utils.formatBytes32String("arandomdomain.opt"),
           random01.address
         )
-      ).to.be.revertedWith("The domain does not exist");
+      ).to.be.revertedWith("DomainDoesNotExist");
     });
 
     it("Should fail when trying to set the domain's address with a different account than the current owner or the current controller", async function () {
@@ -344,7 +338,7 @@ describe("ONS", function () {
       await expect(
         ons.connect(user).setAddress(domain, random01.address)
       ).to.be.revertedWith(
-        "Only the owner and the controller can call this method"
+        `Unauthorised("${user.address}", "owner or controller")`
       );
     });
   });
@@ -391,20 +385,18 @@ describe("ONS", function () {
 
     it("Should fail when trying to set the domain's ttl with an empty string", async function () {
       await expect(ons.setTTL(domain, 1)).to.be.revertedWith(
-        "The domain does not exist"
+        "DomainDoesNotExist"
       );
     });
 
     it("Should fail when trying to set the domain's ttl with an empty integer", async function () {
-      await expect(ons.setTTL(domain, 0)).to.be.revertedWith(
-        "The unsigned integer parameter cannot be equal to zero"
-      );
+      await expect(ons.setTTL(domain, 0)).to.be.revertedWith("EqualToZero");
     });
 
     it("Should fail when trying to set the domain's ttl that is not registered", async function () {
       await expect(
         ons.setTTL(ethers.utils.formatBytes32String("arandomdomain.opt"), 1)
-      ).to.be.revertedWith("The domain does not exist");
+      ).to.be.revertedWith("DomainDoesNotExist");
     });
 
     it("Should fail when trying to set the domain's ttl with a different account than the current owner or the current controller", async function () {
@@ -413,7 +405,7 @@ describe("ONS", function () {
       await registerTx.wait();
 
       await expect(ons.connect(user).setTTL(domain, 1)).to.be.revertedWith(
-        "Only the owner and the controller can call this method"
+        `Unauthorised("${user.address}", "owner or controller")`
       );
     });
   });

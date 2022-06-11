@@ -1,0 +1,94 @@
+# This worflow is composed of two jobs: hardhat and audit:
+# - The linter job checks the files linting (typescript, solidity, etc.).
+# - The hardhat job compiles and tests the smart contracts.
+# - The audit job installs python, slither-analizer and mythril before performing static analysis on solidity files.
+name: CI Workflow
+
+on:
+  push:
+    paths:
+      # Workflows.
+      - '.github/workflows/ci.yml'
+      # Contracts.
+      - 'contracts/**.sol'
+      # Scripts.
+      - 'deploy/*.ts'
+      - 'test/*.ts'
+      # Configuration files.
+      - 'hardhat.config.ts'
+      - 'helper.config.ts'
+      # Dependencies.
+      - 'package.json'
+      - 'package-lock.json'
+
+concurrency: 
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: 📦 Use Node.js v16.14.2 (LTS)
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.14.2
+        cache: 'npm'
+    - name: 🔧 Install dependencies
+      run: npm install
+    - name: 🪄 Lint files with eslint
+      run: npx eslint '**/*.{js,ts}'
+    - name: 🪄 Lint files with prettier
+      run: npx prettier '**/*.{json,sol,md}' --check
+    - name: 🪄 Lint files with solhint
+      run: npx solhint 'contracts/**/*.sol'
+
+  hardhat:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: 📦 Use Node.js v16.14.2 (LTS)
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.14.2
+        cache: 'npm'
+    - name: 🔧 Install dependencies
+      run: npm install
+    - name: ⚙️ Compile
+      run: npx hardhat compile
+    - name: 🧪 Test
+      run: npx hardhat coverage 
+
+  audit:
+    runs-on: ubuntu-latest
+    needs: [hardhat]
+    steps:
+    - uses: actions/checkout@v3
+    - name: 📦 Use Node.js v16.14.2 (LTS)
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.14.2
+        cache: 'npm'
+    - name: 🔧 Install dependencies
+      run: npm install
+    - name: 🔧 Install python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.7
+    - name: 🔧 Install slither and mythril
+      run: |
+        python -m pip install --upgrade pip
+        pip3 install slither-analyzer mythril
+    - name: 🔧 Install solc
+      run: |
+        sudo wget -O /usr/bin/solc https://github.com/ethereum/solidity/releases/download/v0.8.7/solc-static-linux
+        sudo chmod +x /usr/bin/solc
+    - name: ⚙️ Compile
+      run: npm run compile
+    - name: 🐍 Run slither
+      run: npm run slither
+      continue-on-error: true
+    - name: 🛡️ Run mythril
+      run: npm run mythril
+      continue-on-error: true

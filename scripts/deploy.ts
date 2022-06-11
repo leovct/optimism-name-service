@@ -14,8 +14,13 @@ async function main() {
     `ONS contract deployed to the ${network.name} blockchain: ${ons.address}`
   );
 
-  // Verify the contract (on live blockchains).
+  // Verify the contract on https://optimistic.etherscan.io/.
   if (network.config.chainId !== 31337) {
+    console.log(
+      "Waiting for 5 block confirmations before verifying the contract on https://optimistic.etherscan.io/..."
+    );
+    await ons.deployTransaction.wait(6);
+
     await hre.run("verify:verify", {
       address: ons.address,
     });

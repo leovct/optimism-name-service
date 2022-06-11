@@ -58,7 +58,12 @@ jobs:
     - name: ⚙️ Compile
       run: npx hardhat compile
     - name: 🧪 Test
-      run: npx hardhat coverage 
+      run: npx hardhat test 
+    - name: 📊 Coverage
+      run: npx hardhat coverage
+    env:
+      REPORT_GAS: true
+      COINMARKETCAP_API_KEY: ${{ secrets.COINMARKETCAP_API_KEY }}
 
   audit:
     runs-on: ubuntu-latest

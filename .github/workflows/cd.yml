@@ -6,9 +6,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy-to-kovan:
+  deploy-to-optimistic-kovan:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v3
+    - name: 📦 Use Node.js v16.14.2 (LTS)
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.14.2
+        cache: 'npm'
+    - name: 🔧 Install dependencies
+      run: npm install
     - name: 🏠 Deploy to a localhost blockchain
       run: npx hardhat run scripts/deploy.ts
     - name: 🚀 Deploy to Optimistic Kovan testnet

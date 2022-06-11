@@ -4,7 +4,7 @@ The Optimism Name Service (ONS) is a distributed naming system based on the [Opt
 
 ## Project stage
 
-The project is at the prototype stage and is currently being deployed and tested on the Kovan blockchain.
+The project is at the prototype stage and is currently being deployed and tested on the Optimism Kovan blockchain.
 
 ## Advanced Sample Hardhat Project
 

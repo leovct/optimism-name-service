@@ -96,6 +96,12 @@ interface IONS {
      */
     function deregister(bytes32 domain) external;
 
+    /**
+     * @dev Resolves a domain and returns the optimism address.
+     * @param domain the hash of the domain.
+     */
+    function resolve(bytes32 domain) external view returns (address);
+
     /***********************************************************************************************
                                             Getters
     ***********************************************************************************************/

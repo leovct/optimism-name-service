@@ -81,6 +81,14 @@ contract ONS is IONS {
         domainToExist[_domain] = false;
     }
 
+    //slither-disable-next-line naming-convention
+    function resolve(bytes32 _domain) external view override returns(address) {
+        verifyBytes32IsNotEmpty(_domain);
+        verifyDomainExists(_domain);
+
+        return domainToRecord[_domain].optimismAddress;
+    }
+
     /***********************************************************************************************
                                             Getters
     ***********************************************************************************************/

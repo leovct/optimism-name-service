@@ -173,6 +173,48 @@ describe("ONS", function () {
     });
   });
 
+  describe("Resolve", async function () {
+    it("Should register a domain and then resolve it", async function () {
+      // Register a domain.
+      const registerTx = await ons.register(domain, ttl);
+      await registerTx.wait();
+
+      // Resolve the domain.
+      const resolveTx = await ons.resolve(domain);
+      expect(resolveTx).to.equal(owner.address);
+    });
+
+    it("Should register a domain with custom parameters and then resolve it", async function () {
+      const controller = random01.address;
+      const optimismAddress = random02.address;
+
+      // Register a domain with parameters.
+      const registerTx = await ons.registerWithParameters(
+        domain,
+        controller,
+        optimismAddress,
+        ttl
+      );
+      await registerTx.wait();
+
+      // Resolve the domain.
+      const resolveTx = await ons.resolve(domain);
+      expect(resolveTx).to.equal(optimismAddress);
+    });
+
+    it("Should fail when trying to resolve a domain with an empty string", async function () {
+      await expect(
+        ons.resolve(ethers.utils.formatBytes32String(""))
+      ).to.be.revertedWith("EmptyByteString");
+    });
+
+    it("Should fail when trying to resolve a domain that is not registered", async function () {
+      await expect(
+        ons.resolve(ethers.utils.formatBytes32String("arandomdomain.opt"))
+      ).to.be.revertedWith("DomainDoesNotExist");
+    });
+  });
+
   /*************************************************************************************************
                                             Setters
   *************************************************************************************************/

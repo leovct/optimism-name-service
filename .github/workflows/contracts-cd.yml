@@ -1,9 +1,13 @@
-# This worflow deploys the smart contracts to the Optimistic Kovan testnet network.
-name: CD Workflow
+# This worflow deploys and verifies the smart contracts to the Optimistic Kovan testnet network.
+name: Smart Contracts CD Workflow
 
 # Configure the workflow to run manually.
 on:
   workflow_dispatch:
+
+defaults:
+ run:
+  working-directory: ./contracts
 
 jobs:
   deploy-to-optimistic-kovan:
@@ -15,13 +19,13 @@ jobs:
       with:
         node-version: 16.14.2
         cache: 'npm'
+        cache-dependency-path: contracts/package-lock.json
     - name: 🔧 Install npm dependencies
       run: npm install
     - name: 🏠 Deploy to a localhost blockchain
       run: npx hardhat run scripts/deploy.ts
     - name: 🚀 Deploy to Optimistic Kovan testnet
       run: npx hardhat run scripts/deploy.ts --network optimisticKovan
-      continue-on-error: true # TODO: find out why it fails even though the verification succeeds.
     env:
       ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
       OPTIMISTIC_KOVAN_URL: ${{ secrets.OPTIMISTIC_KOVAN_URL }}

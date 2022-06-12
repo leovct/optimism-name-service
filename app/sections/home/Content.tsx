@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import styled from "styled-components";
 import { ethers } from "ethers";
 import { useAddRecentTransaction } from '@rainbow-me/rainbowkit';
@@ -7,9 +7,10 @@ import Button from "../../components/Button";
 import Contract from "../../contracts/ONS.json";
 
 const Content: FC = () => {
+    const [domain, setDomain] = useState('');
     const addRecentTransaction = useAddRecentTransaction();
 
-    const test = async function () {
+    const claimDomain = async function () {
         try {
             const { ethereum } = window;
             if (ethereum) {
@@ -18,13 +19,13 @@ const Content: FC = () => {
                 const contract = new ethers.Contract('0x1e9162F3cf08E7E6EE1f67FD35477a7F9aBC87b5', Contract.abi, signer);
                 console.log('Connected to the contract!');
     
-                const domain = 'wa.opt';
+                // Verify that the domain is not already claimed.
                 const domainToBytes = ethers.utils.formatBytes32String(domain);
-    
-                // Verify domain is not registered yet
                 await contract.getOwner(domainToBytes)
                     .then((owner: string) => console.log(`The domain owner is: ${owner}`))
                     .catch(async () => {
+                        // If it is not, claim it.
+                        // TODO: implement a function to know if a wallet is registered or not (true/false).
                         console.log("The transaction reverted! Maybe the domain is not registered yet...");
     
                         const registerTxn = await contract.register(domainToBytes, 60);
@@ -35,7 +36,6 @@ const Content: FC = () => {
                             hash: registerTxn.hash,
                             description: `Register the ${domain} domain`,
                           });
-                        
                     });
             } else {
                 console.log('Not connected!');
@@ -47,11 +47,14 @@ const Content: FC = () => {
 
     return (
         <Container>
-            <Input type="text" placeholder="wagmi.opt" />
+            <Input
+                type="text"
+                placeholder="wagmi.opt"
+                value={domain}
+                onChange={e => { setDomain(e.currentTarget.value); }}
+            />
             <span>.opt</span>
-            <StyledButton
-                onClick={test}
-            >
+            <StyledButton onClick={claimDomain}>
                 <span>Register the domain</span>
             </StyledButton>
         </Container>

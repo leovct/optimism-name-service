@@ -78,7 +78,7 @@ describe("ONS", function () {
       // Register a domain with an empty string with both functions (standard and with parameters).
       await expect(
         ons.register(ethers.utils.formatBytes32String(""), ttl)
-      ).to.be.revertedWith("EmptyByteString");
+      ).to.be.revertedWith("IsEmpty");
 
       await expect(
         ons.registerWithParameters(
@@ -87,12 +87,12 @@ describe("ONS", function () {
           random02.address,
           ttl
         )
-      ).to.be.revertedWith("EmptyByteString");
+      ).to.be.revertedWith("IsEmpty");
     });
 
     it("Should fail when trying to register a domain with an empty ttl", async function () {
       // Register a domain with an empty ttl with both functions (standard and with parameters).
-      await expect(ons.register(domain, 0)).to.be.revertedWith("EqualToZero");
+      await expect(ons.register(domain, 0)).to.be.revertedWith("IsEqualToZero");
 
       await expect(
         ons.registerWithParameters(
@@ -101,7 +101,7 @@ describe("ONS", function () {
           random02.address,
           0
         )
-      ).to.be.revertedWith("EqualToZero");
+      ).to.be.revertedWith("IsEqualToZero");
     });
 
     it("Should fail when trying to register an already registered domain", async function () {
@@ -110,7 +110,7 @@ describe("ONS", function () {
       await registerTx.wait();
 
       await expect(ons.register(domain, ttl)).to.be.revertedWith(
-        `DomainAlreadyRegistered("${domain}")`
+        `DomainIsRegistered("${domain}")`
       );
 
       await expect(
@@ -120,7 +120,7 @@ describe("ONS", function () {
           random02.address,
           ttl
         )
-      ).to.be.revertedWith(`DomainAlreadyRegistered("${domain}")`);
+      ).to.be.revertedWith(`DomainIsRegistered("${domain}")`);
     });
   });
 
@@ -155,7 +155,7 @@ describe("ONS", function () {
     it("Should fail when trying to deregister a domain with an empty string", async function () {
       await expect(
         ons.deregister(ethers.utils.formatBytes32String(""))
-      ).to.be.revertedWith("EmptyByteString");
+      ).to.be.revertedWith("IsEmpty");
     });
 
     it("Should fail when trying to deregister a domain that is not registered", async function () {
@@ -207,7 +207,7 @@ describe("ONS", function () {
     it("Should fail when trying to resolve a domain with an empty string", async function () {
       await expect(
         ons.resolve(ethers.utils.formatBytes32String(""))
-      ).to.be.revertedWith("EmptyByteString");
+      ).to.be.revertedWith("IsEmpty");
     });
 
     it("Should fail when trying to resolve a domain that is not registered", async function () {
@@ -225,7 +225,7 @@ describe("ONS", function () {
     it("Should fail when trying to get the domain's owner with an empty string", async function () {
       await expect(
         ons.getOwner(ethers.utils.formatBytes32String(""))
-      ).to.be.revertedWith("EmptyByteString");
+      ).to.be.revertedWith("IsEmpty");
     });
 
     it("Should fail when trying to get the domain's owner of a domain that does not exist", async function () {
@@ -239,7 +239,7 @@ describe("ONS", function () {
     it("Should fail when trying to get the domain's controller with an empty string", async function () {
       await expect(
         ons.getController(ethers.utils.formatBytes32String(""))
-      ).to.be.revertedWith("EmptyByteString");
+      ).to.be.revertedWith("IsEmpty");
     });
 
     it("Should fail when trying to get the domain's controller of a domain that does not exist", async function () {
@@ -253,7 +253,7 @@ describe("ONS", function () {
     it("Should fail when trying to get the domain's address with an empty string", async function () {
       await expect(
         ons.getAddress(ethers.utils.formatBytes32String(""))
-      ).to.be.revertedWith("EmptyByteString");
+      ).to.be.revertedWith("IsEmpty");
     });
 
     it("Should fail when trying to get the domain's address of a domain that does not exist", async function () {
@@ -267,7 +267,7 @@ describe("ONS", function () {
     it("Should fail when trying to get the domain's ttl with an empty string", async function () {
       await expect(
         ons.getTTL(ethers.utils.formatBytes32String(""))
-      ).to.be.revertedWith("EmptyByteString");
+      ).to.be.revertedWith("IsEmpty");
     });
 
     it("Should fail when trying to get the domain's ttl of a domain that does not exist", async function () {
@@ -301,7 +301,7 @@ describe("ONS", function () {
     it("Should fail when trying to set the domain's owner with an empty string", async function () {
       await expect(
         ons.setOwner(ethers.utils.formatBytes32String(""), random01.address)
-      ).to.be.revertedWith("EmptyByteString");
+      ).to.be.revertedWith("IsEmpty");
     });
 
     it("Should fail when trying to set the domain's owner that is not registered", async function () {
@@ -330,7 +330,7 @@ describe("ONS", function () {
 
       await expect(
         ons.setOwner(domain, ethers.constants.AddressZero)
-      ).to.be.revertedWith("NullAddress");
+      ).to.be.revertedWith("IsNull");
     });
   });
 
@@ -357,7 +357,7 @@ describe("ONS", function () {
           ethers.utils.formatBytes32String(""),
           random01.address
         )
-      ).to.be.revertedWith("EmptyByteString");
+      ).to.be.revertedWith("IsEmpty");
     });
 
     it("Should fail when trying to set the domain's controller that is not registered", async function () {
@@ -425,7 +425,7 @@ describe("ONS", function () {
     it("Should fail when trying to set the domain's adress with an empty string", async function () {
       await expect(
         ons.setAddress(ethers.utils.formatBytes32String(""), random01.address)
-      ).to.be.revertedWith("EmptyByteString");
+      ).to.be.revertedWith("IsEmpty");
     });
 
     it("Should fail when trying to set the domain's address that is not registered", async function () {
@@ -493,7 +493,7 @@ describe("ONS", function () {
     it("Should fail when trying to set the domain's ttl with an empty string", async function () {
       await expect(
         ons.setTTL(ethers.utils.formatBytes32String(""), random01.address)
-      ).to.be.revertedWith("EmptyByteString");
+      ).to.be.revertedWith("IsEmpty");
     });
 
     it("Should fail when trying to set the domain's ttl with an empty string", async function () {
@@ -503,7 +503,7 @@ describe("ONS", function () {
     });
 
     it("Should fail when trying to set the domain's ttl with an empty integer", async function () {
-      await expect(ons.setTTL(domain, 0)).to.be.revertedWith("EqualToZero");
+      await expect(ons.setTTL(domain, 0)).to.be.revertedWith("IsEqualToZero");
     });
 
     it("Should fail when trying to set the domain's ttl that is not registered", async function () {

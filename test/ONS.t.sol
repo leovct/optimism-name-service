@@ -33,14 +33,14 @@ contract ONSTest is Test {
     function testCannotRegisterWithEmptyDomain(uint256 _ttl) public {
         vm.assume(_ttl > 0);
 
-        vm.expectRevert(ONS.EmptyByteString.selector);
+        vm.expectRevert(ONS.IsEmpty.selector);
         ons.register(bytes32(0), _ttl);
     }
 
-    function testCannotRegisterWithTTLEqualToZero(bytes32 _domain) public {
+    function testCannotRegisterWithTTLIsEqualToZero(bytes32 _domain) public {
         vm.assume(_domain != bytes32(0));
 
-        vm.expectRevert(ONS.EqualToZero.selector);
+        vm.expectRevert(ONS.IsEqualToZero.selector);
         ons.register(_domain, 0);
     }
 
@@ -54,7 +54,7 @@ contract ONSTest is Test {
         ons.register(_domain, _ttl);
 
         vm.expectRevert(
-            abi.encodeWithSignature("DomainAlreadyRegistered(bytes32)", _domain)
+            abi.encodeWithSignature("DomainIsRegistered(bytes32)", _domain)
         );
         ons.register(_domain, _ttl);
     }
@@ -93,7 +93,7 @@ contract ONSTest is Test {
         vm.assume(_controllerAddress != address(0));
         vm.assume(_optimismAddress != address(0));
         vm.assume(_ttl > 0);
-        vm.expectRevert(ONS.EmptyByteString.selector);
+        vm.expectRevert(ONS.IsEmpty.selector);
 
         ons.registerWithParameters(
             bytes32(0),
@@ -103,7 +103,7 @@ contract ONSTest is Test {
         );
     }
 
-    function testCannotRegisterWithParametersAndTTLEqualToZero(
+    function testCannotRegisterWithParametersAndTTLIsEqualToZero(
         bytes32 _domain,
         address _controllerAddress,
         address _optimismAddress
@@ -111,7 +111,7 @@ contract ONSTest is Test {
         vm.assume(_domain != bytes32(0));
         vm.assume(_controllerAddress != address(0));
         vm.assume(_optimismAddress != address(0));
-        vm.expectRevert(ONS.EqualToZero.selector);
+        vm.expectRevert(ONS.IsEqualToZero.selector);
 
         ons.registerWithParameters(
             _domain,
@@ -140,7 +140,7 @@ contract ONSTest is Test {
         );
 
         vm.expectRevert(
-            abi.encodeWithSignature("DomainAlreadyRegistered(bytes32)", _domain)
+            abi.encodeWithSignature("DomainIsRegistered(bytes32)", _domain)
         );
         ons.registerWithParameters(
             _domain,
@@ -161,7 +161,7 @@ contract ONSTest is Test {
     }
 
     function testCannotDeregisterWithEmptyDomain() public {
-        vm.expectRevert(ONS.EmptyByteString.selector);
+        vm.expectRevert(ONS.IsEmpty.selector);
         ons.deregister(bytes32(0));
     }
 
@@ -206,7 +206,7 @@ contract ONSTest is Test {
     }
 
     function testCannotResolveWithRegisterAndEmptyDomain() public {
-        vm.expectRevert(ONS.EmptyByteString.selector);
+        vm.expectRevert(ONS.IsEmpty.selector);
         ons.resolve(bytes32(0));
     }
 
@@ -228,7 +228,7 @@ contract ONSTest is Test {
     // @GetOwner
 
     function testCannotGetOwnerOfEmptyDomain() public {
-        vm.expectRevert(ONS.EmptyByteString.selector);
+        vm.expectRevert(ONS.IsEmpty.selector);
         ons.getOwner(bytes32(0));
     }
 
@@ -246,7 +246,7 @@ contract ONSTest is Test {
     // @GetController
 
     function testCannotGetControllerOfEmptyDomain() public {
-        vm.expectRevert(ONS.EmptyByteString.selector);
+        vm.expectRevert(ONS.IsEmpty.selector);
         ons.getController(bytes32(0));
     }
 
@@ -264,7 +264,7 @@ contract ONSTest is Test {
     // @GetAddress
 
     function testCannotGetAddressOfEmptyDomain() public {
-        vm.expectRevert(ONS.EmptyByteString.selector);
+        vm.expectRevert(ONS.IsEmpty.selector);
         ons.getAddress(bytes32(0));
     }
 
@@ -282,7 +282,7 @@ contract ONSTest is Test {
     // @GetTTL
 
     function testCannotGetTTLOfEmptyDomain() public {
-        vm.expectRevert(ONS.EmptyByteString.selector);
+        vm.expectRevert(ONS.IsEmpty.selector);
         ons.getTTL(bytes32(0));
     }
 
@@ -315,7 +315,7 @@ contract ONSTest is Test {
     function testCannotSetOwnerOfEmptyDomain(address _ownerAddress) public {
         vm.assume(_ownerAddress != address(0));
 
-        vm.expectRevert(ONS.EmptyByteString.selector);
+        vm.expectRevert(ONS.IsEmpty.selector);
         ons.setOwner(bytes32(0), _ownerAddress);
     }
 
@@ -332,12 +332,12 @@ contract ONSTest is Test {
         ons.setOwner(_domain, _ownerAddress);
     }
 
-    function testCannotSetOwnerWithNullAddress(bytes32 _domain) public {
+    function testCannotSetOwnerWithIsNull(bytes32 _domain) public {
         vm.assume(_domain != bytes32(0));
 
         ons.register(_domain, 1);
 
-        vm.expectRevert(ONS.NullAddress.selector);
+        vm.expectRevert(ONS.IsNull.selector);
         ons.setOwner(_domain, address(0));
     }
 
@@ -361,7 +361,7 @@ contract ONSTest is Test {
     {
         vm.assume(_controllerAddress != address(0));
 
-        vm.expectRevert(ONS.EmptyByteString.selector);
+        vm.expectRevert(ONS.IsEmpty.selector);
         ons.setController(bytes32(0), _controllerAddress);
     }
 
@@ -396,7 +396,7 @@ contract ONSTest is Test {
     {
         vm.assume(_optimismAddress != address(0));
 
-        vm.expectRevert(ONS.EmptyByteString.selector);
+        vm.expectRevert(ONS.IsEmpty.selector);
         ons.setAddress(bytes32(0), _optimismAddress);
     }
 
@@ -429,14 +429,14 @@ contract ONSTest is Test {
     function testCannotSetTTLOfEmptyDomain(uint256 _ttl) public {
         vm.assume(_ttl > 0);
 
-        vm.expectRevert(ONS.EmptyByteString.selector);
+        vm.expectRevert(ONS.IsEmpty.selector);
         ons.setTTL(bytes32(0), _ttl);
     }
 
-    function testCannotSetTTLEqualToZero(bytes32 _domain) public {
+    function testCannotSetTTLIsEqualToZero(bytes32 _domain) public {
         vm.assume(_domain != bytes32(0));
 
-        vm.expectRevert(ONS.EqualToZero.selector);
+        vm.expectRevert(ONS.IsEqualToZero.selector);
         ons.setTTL(_domain, 0);
     }
 

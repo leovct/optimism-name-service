@@ -36,7 +36,7 @@ contract ONS is IONS {
     //slither-disable-next-line naming-convention
     function register(bytes32 _domain, uint256 _ttl) external override {
         verifyBytes32IsNotEmpty(_domain);
-        verifyUintIsNotEqualToZero(_ttl);
+        verifyUintIsNotIsEqualToZero(_ttl);
         verifyDomainIsNotRegistered(_domain);
 
         domainToExist[_domain] = true;
@@ -60,7 +60,7 @@ contract ONS is IONS {
         uint256 _ttl
     ) external override {
         verifyBytes32IsNotEmpty(_domain);
-        verifyUintIsNotEqualToZero(_ttl);
+        verifyUintIsNotIsEqualToZero(_ttl);
         verifyDomainIsNotRegistered(_domain);
 
         domainToExist[_domain] = true;
@@ -75,7 +75,7 @@ contract ONS is IONS {
     //slither-disable-next-line naming-convention
     function deregister(bytes32 _domain) external override {
         verifyBytes32IsNotEmpty(_domain);
-        verifyDomainIsAlreadyRegistered(_domain);
+        verifyDomainIsRegistered(_domain);
         onlyOwner(_domain);
 
         domainToExist[_domain] = false;
@@ -84,7 +84,7 @@ contract ONS is IONS {
     //slither-disable-next-line naming-convention
     function resolve(bytes32 _domain) external view override returns (address) {
         verifyBytes32IsNotEmpty(_domain);
-        verifyDomainIsAlreadyRegistered(_domain);
+        verifyDomainIsRegistered(_domain);
 
         return domainToRecord[_domain].optimismAddress;
     }
@@ -101,7 +101,7 @@ contract ONS is IONS {
         returns (address)
     {
         verifyBytes32IsNotEmpty(_domain);
-        verifyDomainIsAlreadyRegistered(_domain);
+        verifyDomainIsRegistered(_domain);
 
         return domainToRecord[_domain].ownerAddress;
     }
@@ -114,7 +114,7 @@ contract ONS is IONS {
         returns (address)
     {
         verifyBytes32IsNotEmpty(_domain);
-        verifyDomainIsAlreadyRegistered(_domain);
+        verifyDomainIsRegistered(_domain);
 
         return domainToRecord[_domain].controllerAddress;
     }
@@ -127,7 +127,7 @@ contract ONS is IONS {
         returns (address)
     {
         verifyBytes32IsNotEmpty(_domain);
-        verifyDomainIsAlreadyRegistered(_domain);
+        verifyDomainIsRegistered(_domain);
 
         return domainToRecord[_domain].optimismAddress;
     }
@@ -135,7 +135,7 @@ contract ONS is IONS {
     //slither-disable-next-line naming-convention
     function getTTL(bytes32 _domain) external view override returns (uint256) {
         verifyBytes32IsNotEmpty(_domain);
-        verifyDomainIsAlreadyRegistered(_domain);
+        verifyDomainIsRegistered(_domain);
 
         return domainToRecord[_domain].ttl;
     }
@@ -150,7 +150,7 @@ contract ONS is IONS {
         override
     {
         verifyBytes32IsNotEmpty(_domain);
-        verifyDomainIsAlreadyRegistered(_domain);
+        verifyDomainIsRegistered(_domain);
         verifyAddressIsNotNull(_ownerAddress);
         onlyOwner(_domain);
 
@@ -165,7 +165,7 @@ contract ONS is IONS {
         override
     {
         verifyBytes32IsNotEmpty(_domain);
-        verifyDomainIsAlreadyRegistered(_domain);
+        verifyDomainIsRegistered(_domain);
         onlyOwner(_domain);
 
         domainToRecord[_domain].controllerAddress = _controllerAddress;
@@ -179,7 +179,7 @@ contract ONS is IONS {
         override
     {
         verifyBytes32IsNotEmpty(_domain);
-        verifyDomainIsAlreadyRegistered(_domain);
+        verifyDomainIsRegistered(_domain);
         onlyOwnerOrController(_domain);
 
         domainToRecord[_domain].optimismAddress = _optimismAddress;
@@ -189,8 +189,8 @@ contract ONS is IONS {
     //slither-disable-next-line naming-convention
     function setTTL(bytes32 _domain, uint256 _ttl) external override {
         verifyBytes32IsNotEmpty(_domain);
-        verifyUintIsNotEqualToZero(_ttl);
-        verifyDomainIsAlreadyRegistered(_domain);
+        verifyUintIsNotIsEqualToZero(_ttl);
+        verifyDomainIsRegistered(_domain);
         onlyOwnerOrController(_domain);
 
         domainToRecord[_domain].ttl = _ttl;
@@ -201,11 +201,11 @@ contract ONS is IONS {
                                             Custom errors
     ***********************************************************************************************/
 
+    error DomainIsRegistered(bytes32 domain);
     error DomainIsNotRegistered(bytes32 domain);
-    error DomainAlreadyRegistered(bytes32 domain);
-    error EmptyByteString();
-    error EqualToZero();
-    error NullAddress();
+    error IsEmpty();
+    error IsEqualToZero();
+    error IsNull();
     error Unauthorised(address callerAddress, string expectedCallers);
 
     /**
@@ -213,7 +213,7 @@ contract ONS is IONS {
      * @param _domain the domain.
      */
     //slither-disable-next-line naming-convention
-    function verifyDomainIsAlreadyRegistered(bytes32 _domain) internal view {
+    function verifyDomainIsRegistered(bytes32 _domain) internal view {
         if (!domainToExist[_domain]) {
             revert DomainIsNotRegistered({domain: _domain});
         }
@@ -226,7 +226,7 @@ contract ONS is IONS {
     //slither-disable-next-line naming-convention
     function verifyDomainIsNotRegistered(bytes32 _domain) internal view {
         if (domainToExist[_domain]) {
-            revert DomainAlreadyRegistered({domain: _domain});
+            revert DomainIsRegistered({domain: _domain});
         }
     }
 
@@ -237,7 +237,7 @@ contract ONS is IONS {
     //slither-disable-next-line naming-convention
     function verifyBytes32IsNotEmpty(bytes32 _str) internal pure {
         if (_str == bytes32(0)) {
-            revert EmptyByteString();
+            revert IsEmpty();
         }
     }
 
@@ -246,9 +246,9 @@ contract ONS is IONS {
      * @param _n the unsigned parameter.
      */
     //slither-disable-next-line naming-convention
-    function verifyUintIsNotEqualToZero(uint256 _n) internal pure {
+    function verifyUintIsNotIsEqualToZero(uint256 _n) internal pure {
         if (_n == 0) {
-            revert EqualToZero();
+            revert IsEqualToZero();
         }
     }
 
@@ -259,7 +259,7 @@ contract ONS is IONS {
     //slither-disable-next-line naming-convention
     function verifyAddressIsNotNull(address _address) internal pure {
         if (_address == address(0)) {
-            revert NullAddress();
+            revert IsNull();
         }
     }
 

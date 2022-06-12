@@ -1,0 +1,31 @@
+# This worflow checks the proper file linting. Vercel takes care of building, testing and deploying
+# our web application to the cloud.
+name: App CI Workflow
+
+on:
+  push:
+    paths:
+      # App files.
+      - "app/**/*.{js,ts,tsx,css,json,svg,ico}"
+      # Workflows.
+      - ".github/workflows/app-*.yml"
+
+defaults:
+  run:
+    working-directory: ./app
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 📦 Use Node.js v16.14.2 (LTS)
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.14.2
+          cache: "npm"
+          cache-dependency-path: app/package-lock.json
+      - name: 🔧 Install dependencies
+        run: npm install
+      - name: 🪄 Lint files
+        run: npm run lint

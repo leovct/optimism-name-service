@@ -1,4 +1,4 @@
-# This worflow is composed of two jobs: hardhat and audit:
+# This worflow is composed of three jobs:
 # - The linter job checks the files linting (typescript, solidity, etc.).
 # - The test job compiles and tests the smart contracts.
 # - The audit job installs python, slither-analizer and mythril before performing static analysis on solidity files.
@@ -8,7 +8,7 @@ on:
   push:
     paths:
       # Workflows.
-      - ".github/workflows/**.yml"
+      - ".github/workflows/contracts-**.yml"
       # Contracts.
       - "contracts/contracts/**.sol"
       # Scripts.

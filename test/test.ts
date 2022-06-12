@@ -147,7 +147,9 @@ describe("ONS", function () {
         "DomainIsNotRegistered"
       );
 
-      await expect(ons.getTTL(domain)).to.be.revertedWith("DomainIsNotRegistered");
+      await expect(ons.getTTL(domain)).to.be.revertedWith(
+        "DomainIsNotRegistered"
+      );
     });
 
     it("Should fail when trying to deregister a domain with an empty string", async function () {
@@ -269,7 +271,9 @@ describe("ONS", function () {
     });
 
     it("Should fail when trying to get the domain's ttl of a domain that does not exist", async function () {
-      await expect(ons.getTTL(domain)).to.be.revertedWith("DomainIsNotRegistered");
+      await expect(ons.getTTL(domain)).to.be.revertedWith(
+        "DomainIsNotRegistered"
+      );
     });
   });
 

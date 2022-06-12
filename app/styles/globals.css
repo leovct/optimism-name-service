@@ -4,11 +4,21 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
 
-a {
-  color: inherit;
-  text-decoration: none;
+  /* Background image */
+  background-image: url("../assets/background/scattered-forcefields.svg");
+  background-repeat: no-repeat;
+  background-size: 100%;
+
+  /* Background color */
+  background-color: rgba(13, 13, 13, 0.82);
+  backdrop-filter: blur(4px);
+
+  /* Text color */
+  color: white;
+
+  /* Disable text selection */
+  user-select: none;
 }
 
 * {

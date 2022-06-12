@@ -1,23 +1,28 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
+import Content from '../sections/home/Content'
+import Footer from '../sections/home/Footer'
+import Header from '../sections/home/Header'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
   return (
-    <div className={styles.container}>
+    <>
       <Head>
         <title>ONS</title>
-        <meta name="description" content="Optimism Name Service" />
+        <meta
+          name="description"
+          content="Optimism Name Service, a distributed naming system based on the Optimism blockchain"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://www.optimism.io/">Optimism</a> Name Service!
-        </h1>
+        <Header onConnect={() => console.log('You clicked on the connect wallet button')}></Header>
+        <Content></Content>
+        <Footer></Footer>
       </main>
-    </div>
+    </>
   )
 }
 

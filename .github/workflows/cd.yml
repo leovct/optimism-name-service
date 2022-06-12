@@ -15,7 +15,7 @@ jobs:
       with:
         node-version: 16.14.2
         cache: 'npm'
-    - name: 🔧 Install dependencies
+    - name: 🔧 Install npm dependencies
       run: npm install
     - name: 🏠 Deploy to a localhost blockchain
       run: npx hardhat run scripts/deploy.ts

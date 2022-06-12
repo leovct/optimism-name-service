@@ -1,5 +1,5 @@
-import { FC } from "react"
-import styled from "styled-components"
+import { FC } from "react";
+import styled from "styled-components";
 import Image from "next/image";
 
 import Button from "../../components/Button";
@@ -34,7 +34,7 @@ const Header: FC<HeaderProps> = ({ onConnect }) => {
                 </DotButton>
             </MenuContainer>
         </Container>
-    )
+    );
 }
 
 const Container = styled.div`
@@ -109,4 +109,4 @@ const DotButton = styled(Button)`
   }
 `;
 
-export default Header
+export default Header;

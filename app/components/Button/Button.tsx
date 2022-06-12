@@ -9,6 +9,7 @@ const Button = styled.button<ButtonProps>`
   padding: 10px, 16px;
   height: 44px;
   width: 160px;
+
   /* Extra-small size */
   ${(props) =>
     props.size === "xs" &&
@@ -17,6 +18,7 @@ const Button = styled.button<ButtonProps>`
       width: 34px;
       height: 34px;
     `}
+  
   /* Small size */
     ${(props) =>
     props.size === "sm" &&
@@ -25,12 +27,12 @@ const Button = styled.button<ButtonProps>`
       width: 44px;
     `}
   
-    /* Background */
+  /* Background */
   background:
     linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
     linear-gradient(311.52deg, #FFCC00 -10.37%, #FF0320 62.81%);
   
-    /* Border */
+  /* Border */
   border: 1px solid #8282954d;
   border-radius: 4px;
   
@@ -51,7 +53,6 @@ const Button = styled.button<ButtonProps>`
     background:
       linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
       linear-gradient(311.52deg, #ff4747 -36.37%, #FFCC00 62.81%);
-      //linear-gradient(311.52deg, #01FFFF 0%, #FFCC00 100%);
   }
 
   &:active {

@@ -12,8 +12,11 @@ The project is at the prototype stage and is currently being deployed and tested
 ```shell
 # 📦 Get up and running (make sure to update the environment variables).
 npm install
-curl -L https://foundry.paradigm.xyz | bash # foundry (https://github.com/foundry-rs/foundry).
 cp .env.example .env
+
+# 🔧 Setup foundry
+curl -L https://foundry.paradigm.xyz | bash # foundry (https://github.com/foundry-rs/foundry).
+forge init --no-commit --no-git --force
 
 # 🪄 Lint files.
 npx eslint '**/*.{js,ts}'

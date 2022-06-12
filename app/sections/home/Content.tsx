@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 import { useAddRecentTransaction } from '@rainbow-me/rainbowkit';
 
 import Button from "../../components/Button";
-import Contract from "../../../contracts/artifacts/ONS.sol/ONS.json";
+import Contract from "../../contracts/ONS.json";
 
 const Content: FC = () => {
     const addRecentTransaction = useAddRecentTransaction();

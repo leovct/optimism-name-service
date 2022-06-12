@@ -61,8 +61,12 @@ jobs:
       uses: foundry-rs/foundry-toolchain@v1
       with:
         version: nightly
+    - name: 🔧 Setup foundry
+      run: forge init --no-commit --no-git --force
     - name: ⚙️ Compile (hardhat)
       run: npx hardhat compile
+    - name: ⚙️ Compile (foundry)
+      run: forge build
     - name: 🧪 Test (hardhat)
       run: npx hardhat test
     - name: 🧪 Test (foundry)

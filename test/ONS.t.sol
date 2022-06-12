@@ -32,25 +32,30 @@ contract ONSTest is Test {
 
     function testCannotRegisterWithEmptyDomain(uint256 _ttl) public {
         vm.assume(_ttl > 0);
-        
+
         vm.expectRevert(ONS.EmptyByteString.selector);
         ons.register(bytes32(0), _ttl);
     }
 
     function testCannotRegisterWithTTLEqualToZero(bytes32 _domain) public {
         vm.assume(_domain != bytes32(0));
-        
+
         vm.expectRevert(ONS.EqualToZero.selector);
         ons.register(_domain, 0);
     }
 
-    function testCannotRegisterAlreadyRegisteredDomain(bytes32 _domain, uint256 _ttl) public {
+    function testCannotRegisterAlreadyRegisteredDomain(
+        bytes32 _domain,
+        uint256 _ttl
+    ) public {
         vm.assume(_domain != bytes32(0));
         vm.assume(_ttl > 0);
 
         ons.register(_domain, _ttl);
 
-        vm.expectRevert(abi.encodeWithSignature("DomainAlreadyExists(bytes32)", _domain));
+        vm.expectRevert(
+            abi.encodeWithSignature("DomainAlreadyExists(bytes32)", _domain)
+        );
         ons.register(_domain, _ttl);
     }
 
@@ -67,7 +72,12 @@ contract ONSTest is Test {
         vm.assume(_optimismAddress != address(0));
         vm.assume(_ttl > 0);
 
-        ons.registerWithParameters(_domain, _controllerAddress, _optimismAddress, _ttl);
+        ons.registerWithParameters(
+            _domain,
+            _controllerAddress,
+            _optimismAddress,
+            _ttl
+        );
 
         assertEq(ons.getOwner(_domain), address(this));
         assertEq(ons.getController(_domain), _controllerAddress);
@@ -85,7 +95,12 @@ contract ONSTest is Test {
         vm.assume(_ttl > 0);
         vm.expectRevert(ONS.EmptyByteString.selector);
 
-        ons.registerWithParameters(bytes32(0), _controllerAddress, _optimismAddress, 0);
+        ons.registerWithParameters(
+            bytes32(0),
+            _controllerAddress,
+            _optimismAddress,
+            0
+        );
     }
 
     function testCannotRegisterWithParametersAndTTLEqualToZero(
@@ -98,7 +113,12 @@ contract ONSTest is Test {
         vm.assume(_optimismAddress != address(0));
         vm.expectRevert(ONS.EqualToZero.selector);
 
-        ons.registerWithParameters(_domain, _controllerAddress, _optimismAddress, 0);
+        ons.registerWithParameters(
+            _domain,
+            _controllerAddress,
+            _optimismAddress,
+            0
+        );
     }
 
     function testCannotRegisterWithParametersAndAlreadyRegisteredDomain(
@@ -112,10 +132,22 @@ contract ONSTest is Test {
         vm.assume(_optimismAddress != address(0));
         vm.assume(_ttl > 0);
 
-        ons.registerWithParameters(_domain, _controllerAddress, _optimismAddress, _ttl);
+        ons.registerWithParameters(
+            _domain,
+            _controllerAddress,
+            _optimismAddress,
+            _ttl
+        );
 
-        vm.expectRevert(abi.encodeWithSignature("DomainAlreadyExists(bytes32)", _domain));
-        ons.registerWithParameters(_domain, _controllerAddress, _optimismAddress, _ttl);
+        vm.expectRevert(
+            abi.encodeWithSignature("DomainAlreadyExists(bytes32)", _domain)
+        );
+        ons.registerWithParameters(
+            _domain,
+            _controllerAddress,
+            _optimismAddress,
+            _ttl
+        );
     }
 
     // @Deregister
@@ -133,10 +165,14 @@ contract ONSTest is Test {
         ons.deregister(bytes32(0));
     }
 
-    function testCannotDeregisterDomainThatDoesNotExist(bytes32 _domain) public {
+    function testCannotDeregisterDomainThatDoesNotExist(bytes32 _domain)
+        public
+    {
         vm.assume(_domain != bytes32(0));
 
-        vm.expectRevert(abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain));
+        vm.expectRevert(
+            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+        );
         ons.deregister(_domain);
     }
 
@@ -160,7 +196,12 @@ contract ONSTest is Test {
         vm.assume(_optimismAddress != address(0));
         vm.assume(_ttl > 0);
 
-        ons.registerWithParameters(_domain, _controllerAddress, _optimismAddress, _ttl);
+        ons.registerWithParameters(
+            _domain,
+            _controllerAddress,
+            _optimismAddress,
+            _ttl
+        );
         assertEq(ons.resolve(_domain), _optimismAddress);
     }
 
@@ -169,10 +210,14 @@ contract ONSTest is Test {
         ons.resolve(bytes32(0));
     }
 
-    function testCannotResolveWithRegisterAndUnregisteredDomain(bytes32 _domain) public {
+    function testCannotResolveWithRegisterAndUnregisteredDomain(bytes32 _domain)
+        public
+    {
         vm.assume(_domain != bytes32(0));
 
-        vm.expectRevert(abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain));
+        vm.expectRevert(
+            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+        );
         ons.resolve(_domain);
     }
 
@@ -187,10 +232,14 @@ contract ONSTest is Test {
         ons.getOwner(bytes32(0));
     }
 
-    function testCannotGetOwnerOfDomainThatDoesNotExist(bytes32 _domain) public {
+    function testCannotGetOwnerOfDomainThatDoesNotExist(bytes32 _domain)
+        public
+    {
         vm.assume(_domain != bytes32(0));
 
-        vm.expectRevert(abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain));
+        vm.expectRevert(
+            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+        );
         ons.getOwner(_domain);
     }
 
@@ -201,10 +250,14 @@ contract ONSTest is Test {
         ons.getController(bytes32(0));
     }
 
-    function testCannotGetControllerOfDomainThatDoesNotExist(bytes32 _domain) public {
+    function testCannotGetControllerOfDomainThatDoesNotExist(bytes32 _domain)
+        public
+    {
         vm.assume(_domain != bytes32(0));
 
-        vm.expectRevert(abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain));
+        vm.expectRevert(
+            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+        );
         ons.getController(_domain);
     }
 
@@ -215,10 +268,14 @@ contract ONSTest is Test {
         ons.getAddress(bytes32(0));
     }
 
-    function testCannotGetAddressOfDomainThatDoesNotExist(bytes32 _domain) public {
+    function testCannotGetAddressOfDomainThatDoesNotExist(bytes32 _domain)
+        public
+    {
         vm.assume(_domain != bytes32(0));
 
-        vm.expectRevert(abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain));
+        vm.expectRevert(
+            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+        );
         ons.getAddress(_domain);
     }
 
@@ -232,7 +289,9 @@ contract ONSTest is Test {
     function testCannotGetTTLOfDomainThatDoesNotExist(bytes32 _domain) public {
         vm.assume(_domain != bytes32(0));
 
-        vm.expectRevert(abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain));
+        vm.expectRevert(
+            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+        );
         ons.getTTL(_domain);
     }
 
@@ -260,11 +319,16 @@ contract ONSTest is Test {
         ons.setOwner(bytes32(0), _ownerAddress);
     }
 
-    function testCannotSetOwnerOfDomainThatDoesNotExist(bytes32 _domain, address _ownerAddress) public {
+    function testCannotSetOwnerOfDomainThatDoesNotExist(
+        bytes32 _domain,
+        address _ownerAddress
+    ) public {
         vm.assume(_domain != bytes32(0));
         vm.assume(_ownerAddress != address(0));
 
-        vm.expectRevert(abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain));
+        vm.expectRevert(
+            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+        );
         ons.setOwner(_domain, _ownerAddress);
     }
 
@@ -280,7 +344,9 @@ contract ONSTest is Test {
     // @SetController
     // Note: how to test the execution of a method using another account than the owner one?
 
-    function testSetController(bytes32 _domain, address _controllerAddress) public {
+    function testSetController(bytes32 _domain, address _controllerAddress)
+        public
+    {
         vm.assume(_domain != bytes32(0));
         vm.assume(_controllerAddress != address(0));
 
@@ -290,18 +356,25 @@ contract ONSTest is Test {
         assertEq(ons.getController(_domain), _controllerAddress);
     }
 
-    function testCannotSetControllerOfEmptyDomain(address _controllerAddress) public {
+    function testCannotSetControllerOfEmptyDomain(address _controllerAddress)
+        public
+    {
         vm.assume(_controllerAddress != address(0));
 
         vm.expectRevert(ONS.EmptyByteString.selector);
         ons.setController(bytes32(0), _controllerAddress);
     }
 
-    function testCannotSetControllerOfDomainThatDoesNotExist(bytes32 _domain, address _controllerAddress) public {
+    function testCannotSetControllerOfDomainThatDoesNotExist(
+        bytes32 _domain,
+        address _controllerAddress
+    ) public {
         vm.assume(_domain != bytes32(0));
         vm.assume(_controllerAddress != address(0));
 
-        vm.expectRevert(abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain));
+        vm.expectRevert(
+            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+        );
         ons.setController(_domain, _controllerAddress);
     }
 
@@ -318,18 +391,25 @@ contract ONSTest is Test {
         assertEq(ons.getAddress(_domain), _optimismAddress);
     }
 
-    function testCannotSetAddressOfEmptyDomain(address _optimismAddress) public {
+    function testCannotSetAddressOfEmptyDomain(address _optimismAddress)
+        public
+    {
         vm.assume(_optimismAddress != address(0));
 
         vm.expectRevert(ONS.EmptyByteString.selector);
         ons.setAddress(bytes32(0), _optimismAddress);
     }
 
-    function testCannotSetAddressOfDomainThatDoesNotExist(bytes32 _domain, address _optimismAddress) public {
+    function testCannotSetAddressOfDomainThatDoesNotExist(
+        bytes32 _domain,
+        address _optimismAddress
+    ) public {
         vm.assume(_domain != bytes32(0));
         vm.assume(_optimismAddress != address(0));
 
-        vm.expectRevert(abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain));
+        vm.expectRevert(
+            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+        );
         ons.setAddress(_domain, _optimismAddress);
     }
 
@@ -360,11 +440,16 @@ contract ONSTest is Test {
         ons.setTTL(_domain, 0);
     }
 
-    function testCannotSetTTLOfDomainThatDoesNotExist(bytes32 _domain, uint256 _ttl) public {
+    function testCannotSetTTLOfDomainThatDoesNotExist(
+        bytes32 _domain,
+        uint256 _ttl
+    ) public {
         vm.assume(_domain != bytes32(0));
         vm.assume(_ttl > 0);
 
-        vm.expectRevert(abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain));
+        vm.expectRevert(
+            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+        );
         ons.setTTL(_domain, _ttl);
     }
 }

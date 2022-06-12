@@ -82,7 +82,7 @@ contract ONS is IONS {
     }
 
     //slither-disable-next-line naming-convention
-    function resolve(bytes32 _domain) external view override returns(address) {
+    function resolve(bytes32 _domain) external view override returns (address) {
         verifyBytes32IsNotEmpty(_domain);
         verifyDomainExists(_domain);
 

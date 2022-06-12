@@ -3,7 +3,7 @@ pragma solidity ^0.8.7;
 
 import "forge-std/Script.sol";
 
-import { ONS } from "contracts/ONS.sol";
+import {ONS} from "contracts/ONS.sol";
 
 contract ONSScript is Script {
     function setUp() public {}

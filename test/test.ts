@@ -216,6 +216,64 @@ describe("ONS", function () {
   });
 
   /*************************************************************************************************
+                                          Getters
+*************************************************************************************************/
+
+  describe("GetOwner", async function () {
+    it("Should fail when trying to get the domain's owner with an empty string", async function () {
+      await expect(
+        ons.getOwner(ethers.utils.formatBytes32String(""))
+      ).to.be.revertedWith("EmptyByteString");
+    });
+
+    it("Should fail when trying to get the domain's owner of a domain that does not exist", async function () {
+      await expect(ons.getOwner(domain)).to.be.revertedWith(
+        "DomainDoesNotExist"
+      );
+    });
+  });
+
+  describe("GetController", async function () {
+    it("Should fail when trying to get the domain's controller with an empty string", async function () {
+      await expect(
+        ons.getController(ethers.utils.formatBytes32String(""))
+      ).to.be.revertedWith("EmptyByteString");
+    });
+
+    it("Should fail when trying to get the domain's controller of a domain that does not exist", async function () {
+      await expect(ons.getController(domain)).to.be.revertedWith(
+        "DomainDoesNotExist"
+      );
+    });
+  });
+
+  describe("GetAddress", async function () {
+    it("Should fail when trying to get the domain's address with an empty string", async function () {
+      await expect(
+        ons.getAddress(ethers.utils.formatBytes32String(""))
+      ).to.be.revertedWith("EmptyByteString");
+    });
+
+    it("Should fail when trying to get the domain's address of a domain that does not exist", async function () {
+      await expect(ons.getAddress(domain)).to.be.revertedWith(
+        "DomainDoesNotExist"
+      );
+    });
+  });
+
+  describe("GetTTL", async function () {
+    it("Should fail when trying to get the domain's ttl with an empty string", async function () {
+      await expect(
+        ons.getTTL(ethers.utils.formatBytes32String(""))
+      ).to.be.revertedWith("EmptyByteString");
+    });
+
+    it("Should fail when trying to get the domain's ttl of a domain that does not exist", async function () {
+      await expect(ons.getTTL(domain)).to.be.revertedWith("DomainDoesNotExist");
+    });
+  });
+
+  /*************************************************************************************************
                                             Setters
   *************************************************************************************************/
 

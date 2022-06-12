@@ -54,7 +54,7 @@ contract ONSTest is Test {
         ons.register(_domain, _ttl);
 
         vm.expectRevert(
-            abi.encodeWithSignature("DomainAlreadyExists(bytes32)", _domain)
+            abi.encodeWithSignature("DomainAlreadyRegistered(bytes32)", _domain)
         );
         ons.register(_domain, _ttl);
     }
@@ -140,7 +140,7 @@ contract ONSTest is Test {
         );
 
         vm.expectRevert(
-            abi.encodeWithSignature("DomainAlreadyExists(bytes32)", _domain)
+            abi.encodeWithSignature("DomainAlreadyRegistered(bytes32)", _domain)
         );
         ons.registerWithParameters(
             _domain,
@@ -171,7 +171,7 @@ contract ONSTest is Test {
         vm.assume(_domain != bytes32(0));
 
         vm.expectRevert(
-            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+            abi.encodeWithSignature("DomainIsNotRegistered(bytes32)", _domain)
         );
         ons.deregister(_domain);
     }
@@ -216,7 +216,7 @@ contract ONSTest is Test {
         vm.assume(_domain != bytes32(0));
 
         vm.expectRevert(
-            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+            abi.encodeWithSignature("DomainIsNotRegistered(bytes32)", _domain)
         );
         ons.resolve(_domain);
     }
@@ -238,7 +238,7 @@ contract ONSTest is Test {
         vm.assume(_domain != bytes32(0));
 
         vm.expectRevert(
-            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+            abi.encodeWithSignature("DomainIsNotRegistered(bytes32)", _domain)
         );
         ons.getOwner(_domain);
     }
@@ -256,7 +256,7 @@ contract ONSTest is Test {
         vm.assume(_domain != bytes32(0));
 
         vm.expectRevert(
-            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+            abi.encodeWithSignature("DomainIsNotRegistered(bytes32)", _domain)
         );
         ons.getController(_domain);
     }
@@ -274,7 +274,7 @@ contract ONSTest is Test {
         vm.assume(_domain != bytes32(0));
 
         vm.expectRevert(
-            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+            abi.encodeWithSignature("DomainIsNotRegistered(bytes32)", _domain)
         );
         ons.getAddress(_domain);
     }
@@ -290,7 +290,7 @@ contract ONSTest is Test {
         vm.assume(_domain != bytes32(0));
 
         vm.expectRevert(
-            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+            abi.encodeWithSignature("DomainIsNotRegistered(bytes32)", _domain)
         );
         ons.getTTL(_domain);
     }
@@ -327,7 +327,7 @@ contract ONSTest is Test {
         vm.assume(_ownerAddress != address(0));
 
         vm.expectRevert(
-            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+            abi.encodeWithSignature("DomainIsNotRegistered(bytes32)", _domain)
         );
         ons.setOwner(_domain, _ownerAddress);
     }
@@ -373,7 +373,7 @@ contract ONSTest is Test {
         vm.assume(_controllerAddress != address(0));
 
         vm.expectRevert(
-            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+            abi.encodeWithSignature("DomainIsNotRegistered(bytes32)", _domain)
         );
         ons.setController(_domain, _controllerAddress);
     }
@@ -408,7 +408,7 @@ contract ONSTest is Test {
         vm.assume(_optimismAddress != address(0));
 
         vm.expectRevert(
-            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+            abi.encodeWithSignature("DomainIsNotRegistered(bytes32)", _domain)
         );
         ons.setAddress(_domain, _optimismAddress);
     }
@@ -448,7 +448,7 @@ contract ONSTest is Test {
         vm.assume(_ttl > 0);
 
         vm.expectRevert(
-            abi.encodeWithSignature("DomainDoesNotExist(bytes32)", _domain)
+            abi.encodeWithSignature("DomainIsNotRegistered(bytes32)", _domain)
         );
         ons.setTTL(_domain, _ttl);
     }

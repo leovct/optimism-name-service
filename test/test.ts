@@ -110,7 +110,7 @@ describe("ONS", function () {
       await registerTx.wait();
 
       await expect(ons.register(domain, ttl)).to.be.revertedWith(
-        `DomainAlreadyExists("${domain}")`
+        `DomainAlreadyRegistered("${domain}")`
       );
 
       await expect(
@@ -120,7 +120,7 @@ describe("ONS", function () {
           random02.address,
           ttl
         )
-      ).to.be.revertedWith(`DomainAlreadyExists("${domain}")`);
+      ).to.be.revertedWith(`DomainAlreadyRegistered("${domain}")`);
     });
   });
 
@@ -136,18 +136,18 @@ describe("ONS", function () {
 
       // Check that trying to get the domain records reverts.
       await expect(ons.getOwner(domain)).to.be.revertedWith(
-        "DomainDoesNotExist"
+        "DomainIsNotRegistered"
       );
 
       await expect(ons.getController(domain)).to.be.revertedWith(
-        "DomainDoesNotExist"
+        "DomainIsNotRegistered"
       );
 
       await expect(ons.getAddress(domain)).to.be.revertedWith(
-        "DomainDoesNotExist"
+        "DomainIsNotRegistered"
       );
 
-      await expect(ons.getTTL(domain)).to.be.revertedWith("DomainDoesNotExist");
+      await expect(ons.getTTL(domain)).to.be.revertedWith("DomainIsNotRegistered");
     });
 
     it("Should fail when trying to deregister a domain with an empty string", async function () {
@@ -159,7 +159,7 @@ describe("ONS", function () {
     it("Should fail when trying to deregister a domain that is not registered", async function () {
       await expect(
         ons.deregister(ethers.utils.formatBytes32String("arandomdomain.opt"))
-      ).to.be.revertedWith("DomainDoesNotExist");
+      ).to.be.revertedWith("DomainIsNotRegistered");
     });
 
     it("Should fail when trying to deregister a domain with a different account than the current owner", async function () {
@@ -211,7 +211,7 @@ describe("ONS", function () {
     it("Should fail when trying to resolve a domain that is not registered", async function () {
       await expect(
         ons.resolve(ethers.utils.formatBytes32String("arandomdomain.opt"))
-      ).to.be.revertedWith("DomainDoesNotExist");
+      ).to.be.revertedWith("DomainIsNotRegistered");
     });
   });
 
@@ -228,7 +228,7 @@ describe("ONS", function () {
 
     it("Should fail when trying to get the domain's owner of a domain that does not exist", async function () {
       await expect(ons.getOwner(domain)).to.be.revertedWith(
-        "DomainDoesNotExist"
+        "DomainIsNotRegistered"
       );
     });
   });
@@ -242,7 +242,7 @@ describe("ONS", function () {
 
     it("Should fail when trying to get the domain's controller of a domain that does not exist", async function () {
       await expect(ons.getController(domain)).to.be.revertedWith(
-        "DomainDoesNotExist"
+        "DomainIsNotRegistered"
       );
     });
   });
@@ -256,7 +256,7 @@ describe("ONS", function () {
 
     it("Should fail when trying to get the domain's address of a domain that does not exist", async function () {
       await expect(ons.getAddress(domain)).to.be.revertedWith(
-        "DomainDoesNotExist"
+        "DomainIsNotRegistered"
       );
     });
   });
@@ -269,7 +269,7 @@ describe("ONS", function () {
     });
 
     it("Should fail when trying to get the domain's ttl of a domain that does not exist", async function () {
-      await expect(ons.getTTL(domain)).to.be.revertedWith("DomainDoesNotExist");
+      await expect(ons.getTTL(domain)).to.be.revertedWith("DomainIsNotRegistered");
     });
   });
 
@@ -306,7 +306,7 @@ describe("ONS", function () {
           ethers.utils.formatBytes32String("arandomdomain.opt"),
           random01.address
         )
-      ).to.be.revertedWith("DomainDoesNotExist");
+      ).to.be.revertedWith("DomainIsNotRegistered");
     });
 
     it("Should fail when trying to set the domain's owner with a different account than the current owner", async function () {
@@ -362,7 +362,7 @@ describe("ONS", function () {
           ethers.utils.formatBytes32String("arandomdomain.opt"),
           random01.address
         )
-      ).to.be.revertedWith("DomainDoesNotExist");
+      ).to.be.revertedWith("DomainIsNotRegistered");
     });
 
     it("Should fail when trying to set the domain's controller with a different account than the current owner", async function () {
@@ -430,7 +430,7 @@ describe("ONS", function () {
           ethers.utils.formatBytes32String("arandomdomain.opt"),
           random01.address
         )
-      ).to.be.revertedWith("DomainDoesNotExist");
+      ).to.be.revertedWith("DomainIsNotRegistered");
     });
 
     it("Should fail when trying to set the domain's address with a different account than the current owner or the current controller", async function () {
@@ -494,7 +494,7 @@ describe("ONS", function () {
 
     it("Should fail when trying to set the domain's ttl with an empty string", async function () {
       await expect(ons.setTTL(domain, 1)).to.be.revertedWith(
-        "DomainDoesNotExist"
+        "DomainIsNotRegistered"
       );
     });
 
@@ -505,7 +505,7 @@ describe("ONS", function () {
     it("Should fail when trying to set the domain's ttl that is not registered", async function () {
       await expect(
         ons.setTTL(ethers.utils.formatBytes32String("arandomdomain.opt"), 1)
-      ).to.be.revertedWith("DomainDoesNotExist");
+      ).to.be.revertedWith("DomainIsNotRegistered");
     });
 
     it("Should fail when trying to set the domain's ttl with a different account than the current owner or the current controller", async function () {

@@ -237,9 +237,9 @@ describe("ONS", function () {
     });
 
     it("Should fail when trying to set the domain's owner with an empty string", async function () {
-      await expect(ons.setOwner(domain, random01.address)).to.be.revertedWith(
-        "DomainDoesNotExist"
-      );
+      await expect(
+        ons.setOwner(ethers.utils.formatBytes32String(""), random01.address)
+      ).to.be.revertedWith("EmptyByteString");
     });
 
     it("Should fail when trying to set the domain's owner that is not registered", async function () {
@@ -291,8 +291,11 @@ describe("ONS", function () {
 
     it("Should fail when trying to set the domain's controller with an empty string", async function () {
       await expect(
-        ons.setController(domain, random01.address)
-      ).to.be.revertedWith("DomainDoesNotExist");
+        ons.setController(
+          ethers.utils.formatBytes32String(""),
+          random01.address
+        )
+      ).to.be.revertedWith("EmptyByteString");
     });
 
     it("Should fail when trying to set the domain's controller that is not registered", async function () {
@@ -357,10 +360,10 @@ describe("ONS", function () {
       expect(domainAddress).to.equal(newAddress);
     });
 
-    it("Should fail when trying to set the domain's address with an empty string", async function () {
-      await expect(ons.setAddress(domain, random01.address)).to.be.revertedWith(
-        "DomainDoesNotExist"
-      );
+    it("Should fail when trying to set the domain's adress with an empty string", async function () {
+      await expect(
+        ons.setAddress(ethers.utils.formatBytes32String(""), random01.address)
+      ).to.be.revertedWith("EmptyByteString");
     });
 
     it("Should fail when trying to set the domain's address that is not registered", async function () {
@@ -423,6 +426,12 @@ describe("ONS", function () {
       // Check that the new domain's ttl has been updated.
       const domainTTL = await ons.getTTL(domain);
       expect(domainTTL).to.equal(newTTL);
+    });
+
+    it("Should fail when trying to set the domain's ttl with an empty string", async function () {
+      await expect(
+        ons.setTTL(ethers.utils.formatBytes32String(""), random01.address)
+      ).to.be.revertedWith("EmptyByteString");
     });
 
     it("Should fail when trying to set the domain's ttl with an empty string", async function () {

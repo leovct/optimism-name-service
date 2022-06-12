@@ -18,7 +18,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <Header onConnect={() => console.log('You clicked on the connect wallet button')}></Header>
+        <Header></Header>
         <Content></Content>
         <Footer></Footer>
       </main>

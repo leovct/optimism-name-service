@@ -1,9 +1,13 @@
-import type { NextPage } from 'next';
-import Head from 'next/head';
-import Content from '../sections/home/Content';
-import Footer from '../sections/home/Footer';
-import Header from '../sections/home/Header';
-import styles from '../styles/Home.module.css';
+import styles from "../styles/Home.module.css";
+import type { NextPage } from "next";
+import Head from "next/head";
+
+// eslint-disable-next-line node/no-missing-import
+import Content from "../sections/home/Content";
+// eslint-disable-next-line node/no-missing-import
+import Footer from "../sections/home/Footer";
+// eslint-disable-next-line node/no-missing-import
+import Header from "../sections/home/Header";
 
 const Home: NextPage = () => {
   return (
@@ -24,6 +28,6 @@ const Home: NextPage = () => {
       </main>
     </>
   );
-}
+};
 
 export default Home;

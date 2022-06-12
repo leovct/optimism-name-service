@@ -18,7 +18,7 @@ const Button = styled.button<ButtonProps>`
       width: 34px;
       height: 34px;
     `}
-  
+
   /* Small size */
     ${(props) =>
     props.size === "sm" &&
@@ -31,11 +31,11 @@ const Button = styled.button<ButtonProps>`
   background:
     linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
     linear-gradient(311.52deg, #FFCC00 -10.37%, #FF0320 62.81%);
-  
+
   /* Border */
   border: 1px solid #8282954d;
   border-radius: 4px;
-  
+
   /* Shadow */
   box-shadow: 0px 0px 4px rgba(255, 3, 32, 0.9);
 
@@ -49,9 +49,8 @@ const Button = styled.button<ButtonProps>`
   }
 
   &:hover {
-    background:
-      linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
-      linear-gradient(311.52deg, #ff4747 -36.37%, #FFCC00 62.81%);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+      linear-gradient(311.52deg, #ff4747 -36.37%, #ffcc00 62.81%);
   }
 
   &:active {

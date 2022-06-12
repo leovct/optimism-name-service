@@ -17,6 +17,7 @@ export default class MyDocument extends Document {
 
       const initialProps = await Document.getInitialProps(ctx);
       return {
+        // eslint-disable-next-line node/no-unsupported-features/es-syntax
         ...initialProps,
         styles: (
           <>

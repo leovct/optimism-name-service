@@ -49,7 +49,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        submodules: recursive∆
+        submodules: recursive
     - name: 📦 Use Node.js v16.14.2 (LTS)
       uses: actions/setup-node@v3
       with:
@@ -58,7 +58,7 @@ jobs:
     - name: 🔧 Install npm dependencies
       run: npm install
     - name: 🔧 Install foundry
-      uses: onbjerg/foundry-toolchain@v1
+      uses: foundry-rs/foundry-toolchain@v1
       with:
         version: nightly
     - name: ⚙️ Compile (hardhat)
@@ -68,7 +68,7 @@ jobs:
     - name: 🧪 Test (hardhat)
       run: npx hardhat test
     - name: 🧪 Test (foundry)
-      run: forge test --gas-report
+      run: forge test -vvv --gas-report
     - name: 📊 Coverage (hardhat)
       run: npx hardhat coverage
     env:

@@ -29,7 +29,7 @@ forge build
 
 # 🧪 Test contracts with gas report (hardhat and foundry).
 npx hardhat test
-forge test -vvv
+forge test --gas-report
 
 # 📊 Test coverage report.
 npx hardhat coverage
@@ -42,7 +42,7 @@ myth analyze contracts/ONS.sol
 
 # 🏠 Deploy contract to localhost blockchain (hardhat and foundry).
 npx hardhat run scripts/deploy.ts
-forge script scripts
+forge script scripts/ONS.s.sol
 
 # 🚀 Deploy and verify contract to Optimistic Kovan testnet (hardhat).
 npx hardhat run scripts/deploy.ts --network optimisticKovan

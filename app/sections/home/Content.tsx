@@ -2,12 +2,17 @@ import { FC, useState } from "react";
 import styled from "styled-components";
 import { ethers } from "ethers";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
+import { useNetwork } from "wagmi";
 
 // eslint-disable-next-line node/no-missing-import
 import Button from "../../components/Button";
 import Contract from "../../contracts/ONS.json";
 
+// At the moment, we only allow users to claim domain names on the testnet.
+const ALLOWED_NETWORKS = ["Optimism Kovan"];
+
 const Content: FC = () => {
+	const chain = useNetwork();
 	const [domain, setDomain] = useState("");
 	const addRecentTransaction = useAddRecentTransaction();
 
@@ -53,22 +58,32 @@ const Content: FC = () => {
 		}
 	};
 
+	if (chain.activeChain) {
+		if (ALLOWED_NETWORKS.includes(chain.activeChain.name)) {
+			return (
+				<Container>
+					<Input
+						type="text"
+						placeholder="wagmi.opt"
+						value={domain}
+						onChange={(e) => {
+							setDomain(e.currentTarget.value);
+						}}
+					/>
+					<span>.opt</span>
+					<StyledButton onClick={claimDomain}>
+						<span>Register the domain</span>
+					</StyledButton>
+				</Container>
+			);
+		}
+	}
+
 	return (
 		<Container>
-			<Input
-				type="text"
-				placeholder="wagmi.opt"
-				value={domain}
-				onChange={(e) => {
-					setDomain(e.currentTarget.value);
-				}}
-			/>
-			<span>.opt</span>
-			<StyledButton onClick={claimDomain}>
-				<span>Register the domain</span>
-			</StyledButton>
+			<h1>The service is not deployed on mainnet yet! :)</h1>
 		</Container>
-	);
+	)
 };
 
 const Container = styled.div`
@@ -77,6 +92,10 @@ const Container = styled.div`
 	align-items: center;
 	width: 100%;
 	gap: 10px;
+
+	h1 {
+		color: #ff0320;
+	}
 `;
 
 const StyledButton = styled(Button)`

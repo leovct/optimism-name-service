@@ -29,6 +29,12 @@ const Content: FC = () => {
 				);
 				console.log("Connected to the contract!");
 
+				// Verify that the domain is not empty.
+				if (domain === "") {
+					console.log("Domain name is empty.");
+					return;
+				}
+
 				// Verify that the domain is not already claimed.
 				const domainToBytes = ethers.utils.formatBytes32String(domain);
 				await contract
@@ -54,7 +60,7 @@ const Content: FC = () => {
 				console.log("Not connected!");
 			}
 		} catch (error) {
-			console.log(error);
+			console.log("The transaction failed:", error);
 		}
 	};
 

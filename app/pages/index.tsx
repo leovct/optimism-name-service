@@ -10,24 +10,24 @@ import Footer from "../sections/home/Footer";
 import Header from "../sections/home/Header";
 
 const Home: NextPage = () => {
-  return (
-    <>
-      <Head>
-        <title>ONS</title>
-        <meta
-          name="description"
-          content="Optimism Name Service, a distributed naming system based on the Optimism blockchain"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+	return (
+		<>
+			<Head>
+				<title>ONS</title>
+				<meta
+					name="description"
+					content="Optimism Name Service, a distributed naming system based on the Optimism blockchain"
+				/>
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
 
-      <main className={styles.main}>
-        <Header></Header>
-        <Content></Content>
-        <Footer></Footer>
-      </main>
-    </>
-  );
+			<main className={styles.main}>
+				<Header></Header>
+				<Content></Content>
+				<Footer></Footer>
+			</main>
+		</>
+	);
 };
 
 export default Home;

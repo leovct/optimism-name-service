@@ -2,6 +2,7 @@ import { FC } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 
+// eslint-disable-next-line node/no-missing-import
 import Button from "../../components/Button";
 
 const Footer: FC = () => {
